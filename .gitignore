@@ -533,3 +533,5 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/linux,windows,pycharm,pycharm+all,jetbrains,macos,direnv,python,terraform,ansible
 .python-version
+
+.envrc
