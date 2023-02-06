@@ -1,0 +1,52 @@
+- name: Check for installation
+  stat:
+    path: /usr/local/bin/k3s
+  register: k3s_installed
+  changed_when: False
+
+- name: Download the install script
+  when: not k3s_installed.stat.exists
+  get_url:
+    url: https://get.k3s.io
+    dest: '/home/{{ ansible_user }}/k3s-installer.sh'
+    mode: 0770
+
+- name: Create a directory for K3s config.yaml
+  become: yes
+  ansible.builtin.file:
+    path: /etc/rancher/k3s
+    recurse: true
+
+- name: Create config.yaml
+  become: yes
+  copy:
+    dest: /etc/rancher/k3s/config.yaml
+    content: |
+      server: https://{{ k3s.cluster_domain }}:6443
+      token: {{ k3s.token }}
+      node-ip: {{ private_ipv4 }}
+      kubelet-arg:
+        - "cloud-provider=external"
+
+- name: Install K3s
+  when: not k3s_installed.stat.exists
+  become: yes
+  ansible.builtin.command: >
+    /home/{{ ansible_user }}/k3s-installer.sh
+  environment:
+    K3S_VERSION: '{{ k3s.version }}'
+    INSTALL_K3S_EXEC: agent
+  notify: Enable and start K3s-agent
+
+- name: Add variables to profile
+  become: yes
+  copy:
+    dest: /etc/profile.d/kubernetes.sh
+    content: |
+      PATH=$PATH:/usr/local/bin/
+      export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+      alias k="kubectl"
+      alias ksy="kubectl -n kube-system"
+      alias kgp="kubectl get pods"
+      alias kgs="kubectl get services"
+      
