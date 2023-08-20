@@ -1,0 +1,5 @@
+- name: Apply common
+  hosts: 
+    - servers
+  roles:
+    - k3s-servers

@@ -1,0 +1,5 @@
+- name: Apply k3s-workers
+  hosts: 
+    - workers
+  roles:
+    - k3s-workers

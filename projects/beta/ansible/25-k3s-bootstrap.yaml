@@ -1,0 +1,5 @@
+- name: Apply common
+  hosts: 
+    - servers[0]
+  roles:
+    - k3s-bootstrap
