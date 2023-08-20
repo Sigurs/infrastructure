@@ -1,0 +1,19 @@
+- name: Required only for HA with embedded etcd
+  become: true
+  ufw:
+    comment: Required only for HA with embedded etcd
+    rule: allow
+    port: 2379:2380
+    proto: tcp
+    src: '{{ hostvars[item].private_ipv4 }}'
+  with_items: '{{ groups["servers"] }}'
+
+- name: K3s supervisor and Kubernetes API Server
+  become: true
+  ufw:
+    comment: K3s supervisor and Kubernetes API Server
+    rule: allow
+    port: 6443
+    proto: tcp
+    src: '{{ hostvars[item].private_ipv4 }}'
+  with_items: '{{ groups["servers"] + groups["workers"] }}'
