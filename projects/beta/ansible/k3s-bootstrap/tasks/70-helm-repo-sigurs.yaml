@@ -1,0 +1,5 @@
+- name: Add Sigurs helm repo
+  kubernetes.core.helm_repository:
+    name: sigurs
+    repo_url: https://sigurs.github.io/helm-charts
+    state: present
