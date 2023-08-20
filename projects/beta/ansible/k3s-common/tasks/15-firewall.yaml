@@ -1,0 +1,47 @@
+- name: Kubelet metrics
+  become: yes
+  ufw:
+    comment: Kubelet metrics
+    rule: allow
+    port: 10250
+    proto: tcp
+    src: '{{ hostvars[item].private_ipv4 }}'
+  with_items: '{{ groups["servers"] + groups["workers"] }}'
+
+- name: Cilium VXLAN overlay
+  become: yes
+  ufw:
+    comment: Cilium VXLAN overlay
+    rule: allow
+    port: 8472
+    proto: udp
+    src: '{{ hostvars[item].private_ipv4 }}'
+  with_items: '{{ groups["servers"] + groups["workers"] }}'
+
+- name: Cilium health checks
+  become: yes
+  ufw:
+    comment: Cilium health checks
+    rule: allow
+    port: 4240
+    proto: tcp
+    src: '{{ hostvars[item].private_ipv4 }}'
+  with_items: '{{ groups["servers"] + groups["workers"] }}'
+
+- name: Allow pods
+  become: yes
+  ufw:
+    rule: allow
+    interface: enp7s0
+    direction: in
+    proto: any
+    src: '{{ networks.cluster.cidr }}'
+
+- name: Allow pods
+  become: yes
+  ufw:
+    rule: allow
+    interface: enp7s0
+    direction: out
+    proto: any
+    src: '{{ networks.cluster.cidr }}'
