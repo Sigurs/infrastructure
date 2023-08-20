@@ -1,0 +1,5 @@
+- include_tasks: 10-hostname.yaml
+- include_tasks: 15-routes.yaml
+- include_tasks: 20-packages.yaml
+- include_tasks: 30-firewall.yaml
+- include_tasks: 40-hosts.yaml

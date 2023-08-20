@@ -1,0 +1,13 @@
+- name: Install apt packages
+  become: yes
+  ansible.builtin.apt:
+    pkg:
+    - fail2ban
+    - python3-pip
+    - cifs-utils
+
+- name: Install python packages
+  pip:
+    name:
+      - kubernetes==25.3.0
+    extra_args: --user

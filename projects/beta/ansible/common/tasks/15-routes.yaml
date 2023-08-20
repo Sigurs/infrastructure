@@ -1,0 +1,25 @@
+
+# Does not work all the time. Figure it out later.
+#- name: Get interface name from provided IP
+#  set_fact:
+#    interface_name: "{{ ansible_interfaces | map('regex_replace', '^', 'ansible_') | map('extract', vars) | selectattr('ipv4.address', 'match', private_ipv4) | map(attribute='device') | first }}"
+
+
+- name: Add host interface configuration
+  become: yes
+  notify: Reboot
+  copy:
+    dest: /etc/netplan/60-enp7s0.yaml
+    mode: '0644'
+    content: |
+      network:
+        version: 2
+        ethernets:
+          enp7s0:
+            dhcp4: true
+            routes:
+              - to: default
+                via: 172.21.20.1
+            nameservers:
+              addresses:
+                - 172.21.20.2

@@ -1,0 +1,6 @@
+- name: Add cluster control plane nodes to hosts file
+  become: yes
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    regexp: " {{ k3s.cluster_domain }}$"
+    line: "{{ hostvars[groups['servers'][0]]['private_ipv4'] }} {{ k3s.cluster_domain }}"

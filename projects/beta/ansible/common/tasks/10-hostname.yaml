@@ -1,0 +1,8 @@
+- name: Set hostname
+  become: yes
+  hostname:
+   name: '{{ inventory_hostname }}'
+  notify: Reboot
+
+- name: Force all notified handlers to run at this point, not waiting for normal sync points
+  ansible.builtin.meta: flush_handlers

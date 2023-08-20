@@ -1,0 +1,28 @@
+#- name: Disable UFW
+#  become: yes
+#  community.general.ufw:
+#    state: disabled
+#  notify: Restart ufw
+#
+#- name: Reset UFW
+#  become: yes
+#  ufw:
+#    state: reset
+
+- name: Allow SSH
+  become: yes
+  community.general.ufw:
+    rule: allow
+    name: OpenSSH
+
+- name: Set logging
+  become: yes
+  ufw:
+    logging: 'on'
+
+- name: Enable UFW
+  become: yes
+  community.general.ufw:
+    state: enabled
+  notify: Restart ufw
+
