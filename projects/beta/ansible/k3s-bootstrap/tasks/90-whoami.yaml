@@ -1,0 +1,22 @@
+- name: Add cowboysysop helm repo
+  kubernetes.core.helm_repository:
+    name: cowboysysop
+    repo_url: https://cowboysysop.github.io/charts/
+    state: present
+
+- name: Deploy traefik chart
+  kubernetes.core.helm:
+    name: whoami
+    chart_ref: cowboysysop/whoami
+    release_namespace: default
+    values:
+      ingress:
+        enabled: true
+        hosts:
+          - host: whoami.sigurs.io
+            paths:
+              - /
+        tls:
+          - hosts:
+             - XXXX
+            secretName: cf-origin-cert
