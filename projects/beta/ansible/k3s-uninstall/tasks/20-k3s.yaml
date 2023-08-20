@@ -1,0 +1,27 @@
+- name: Check for K3s installation
+  become: yes
+  stat:
+    path: /usr/local/bin/k3s-uninstall.sh
+  register: k3s_installed
+  changed_when: False
+
+- name: Uninstall K3s
+  become: yes
+  when: k3s_installed.stat.exists
+  ansible.builtin.command: /usr/local/bin/k3s-uninstall.sh
+
+- name: Check for K3s-agent installation
+  become: yes
+  stat:
+    path: /usr/local/bin/k3s-agent-uninstall.sh
+  register: k3s_agent_installed
+  changed_when: False
+
+- name: Uninstall K3s-agent
+  become: yes
+  when: k3s_agent_installed.stat.exists
+  ansible.builtin.command: /usr/local/bin/k3s-agent-uninstall.sh
+
+- name: Unconditionally reboot the machine with all defaults
+  become: yes
+  ansible.builtin.reboot:
