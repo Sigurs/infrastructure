@@ -1,0 +1,13 @@
+- include_tasks: 11-helm.yaml
+- include_tasks: 20-k3s.yaml
+- include_tasks: 21-kubeconfig.yaml
+- include_tasks: 25-hcloud.yaml
+- include_tasks: 30-cilium.yaml
+- include_tasks: 35-csi-smb.yaml
+- include_tasks: 50-traefik-external.yaml
+- include_tasks: 70-helm-repo-sigurs.yaml
+- include_tasks: 71-jellyfin.yaml
+- include_tasks: 72-5etools.yaml
+- include_tasks: 73-foundryvtt.yaml
+- include_tasks: 74-home-assistant.yaml
+- include_tasks: 90-whoami.yaml

@@ -1,0 +1,7 @@
+- name: Enable and start K3s
+  become: yes
+  ansible.builtin.systemd:
+    name: k3s
+    state: started
+    enabled: yes
+    daemon_reload: yes

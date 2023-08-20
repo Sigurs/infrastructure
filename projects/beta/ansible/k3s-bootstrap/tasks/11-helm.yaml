@@ -1,0 +1,33 @@
+- name: Check for installation
+  stat:
+    path: /usr/local/bin/helm
+  register: helm_installed
+  changed_when: False
+
+- name: Download the package
+  when: not helm_installed.stat.exists
+  get_url:
+    url: https://get.helm.sh/helm-v3.11.0-linux-amd64.tar.gz
+    dest: /tmp/helm.tar.gz
+
+- name: Extract
+  when: not helm_installed.stat.exists
+  ansible.builtin.unarchive:
+    remote_src: true
+    src: /tmp/helm.tar.gz
+    dest: /tmp/
+
+- name: Copy helm in place
+  become: yes
+  when: not helm_installed.stat.exists
+  copy:
+    remote_src: true
+    src: /tmp/linux-amd64/helm
+    dest: /usr/local/bin/helm
+
+- name: Set executable
+  become: yes
+  when: not helm_installed.stat.exists
+  file:
+    dest: /usr/local/bin/helm
+    mode: a+x
