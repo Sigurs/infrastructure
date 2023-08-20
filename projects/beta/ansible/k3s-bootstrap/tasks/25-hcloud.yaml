@@ -1,0 +1,33 @@
+- name: Create a secret for both CCM and CSI
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: hcloud
+        namespace: kube-system
+      type: Opaque
+      data:
+        token: '{{ ccm.token|b64encode }}'
+        network: '{{ ccm.network|b64encode }}'
+
+- name: Copy CCM manifest over
+  ansible.builtin.template:
+    src: files/ccm-networks-v.1.13.2.yaml
+    dest: '/home/{{ ansible_user }}/ccm.yaml'
+
+- name: Deploy CCM manifest
+  kubernetes.core.k8s:
+    state: present
+    src: '/home/{{ ansible_user }}/ccm.yaml'
+
+- name: Copy CSI manifest over
+  ansible.builtin.template:
+    src: files/hcloud-csi-v2.1.1.yml
+    dest: '/home/{{ ansible_user }}/hcloud-csi.yaml'
+
+- name: Deploy CSI manifest
+  kubernetes.core.k8s:
+    state: present
+    src: '/home/{{ ansible_user }}/hcloud-csi.yaml'
