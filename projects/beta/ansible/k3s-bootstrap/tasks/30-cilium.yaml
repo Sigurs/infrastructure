@@ -1,0 +1,24 @@
+- name: Add cilium helm repo
+  kubernetes.core.helm_repository:
+    name: cilium
+    repo_url: 'https://helm.cilium.io/'
+    state: present
+
+- name: Deploy cilium chart
+  kubernetes.core.helm:
+    name: cilium
+    chart_ref: cilium/cilium
+    chart_version: 1.12.6
+    create_namespace: true
+    release_namespace: cilium
+    wait: true
+    values:
+      ipam:
+        operator:
+          clusterPoolIPv4PodCIDRList:
+            - '{{ networks.cluster.cidr }}'
+      egressGateway:
+        enabled: true
+      bpf:
+        masquerade: true
+      kubeProxyReplacement: strict
