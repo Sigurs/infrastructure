@@ -1,0 +1,2 @@
+- include_tasks: 15-firewall.yaml
+- include_tasks: 20-k3s.yaml

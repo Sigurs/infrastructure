@@ -1,0 +1,7 @@
+- name: Enable and start K3s-agent
+  become: yes
+  ansible.builtin.systemd:
+    name: k3s-agent
+    state: started
+    enabled: yes
+    daemon_reload: yes
